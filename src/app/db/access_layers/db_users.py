@@ -2,6 +2,7 @@ from typing import Optional
 from dotenv.cli import get
 from fastapi import HTTPException, status
 from sqlalchemy.orm.session import Session
+from sqlalchemy import or_
 from src.app.core.hash import get_password_hash
 from src.app.models.models import DBUsers
 from src.app.schemas.schema import UserBody, PatchUserBody
@@ -57,3 +58,25 @@ async def patch_user(db: Session, user: DBUsers, user_update: PatchUserBody):
     db.add(user)
     db.commit()
     db.refresh(user)
+
+
+# A route to get users from the backend, filterable via a search_filter that filters by
+# first_name, last_name even a partial match is good enough
+async def get_filtered_users(
+    db: Session,
+    search_filter: Optional[str] = None,
+) -> list[DBUsers]:
+    if search_filter:
+        users = (
+            db.query(DBUsers)
+            .filter(
+                or_(
+                    DBUsers.first_name.ilike(f"%{search_filter}%"),
+                    DBUsers.last_name.ilike(f"%{search_filter}%"),
+                )
+            )
+            .all()
+        )
+    else:
+        users = db.query(DBUsers).all()
+    return users

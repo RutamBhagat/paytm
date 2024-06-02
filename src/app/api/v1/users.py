@@ -1,3 +1,4 @@
+from typing import List, Optional
 from fastapi import APIRouter, HTTPException, status
 
 from src.app.core.hash import get_password_hash, verify_password
@@ -39,3 +40,18 @@ async def patch_user(
     db: db_dependency, user: user_dependency, user_update: PatchUserBody
 ):
     await db_users.patch_user(db, user, user_update)
+
+
+# A route to get users from the backend, filterable via first_name, last_name
+@router.get(
+    "/get_users",
+    status_code=status.HTTP_200_OK,
+    response_model=List[UserResponse],
+)
+async def get_users(
+    db: db_dependency,
+    user: user_dependency,
+    search_filter: Optional[str] = None,
+):
+    users = await db_users.get_filtered_users(db, search_filter)
+    return users
