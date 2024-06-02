@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "todoapp"
+version = "0.1.0"
+description = ""
+authors = ["RutamBhagat <rutambhagat@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.2"
+uvicorn = "^0.27.1"
+sqlalchemy = "^2.0.27"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+python-dotenv = "^1.0.1"
+python-multipart = "^0.0.9"
+psycopg2-binary = "^2.9.9"
+alembic = "^1.13.1"
+black = "^24.4.2"
+isort = "^5.13.2"
+bcrypt = "^4.1.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
