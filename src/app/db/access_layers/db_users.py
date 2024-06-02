@@ -5,7 +5,7 @@ from sqlalchemy.orm.session import Session
 from sqlalchemy import or_
 from src.app.core.hash import get_password_hash
 from src.app.models.models import DBUsers
-from src.app.schemas.schema import UserBody, PatchUserBody
+from src.app.schemas.user_schema import UserBody, PatchUserBody
 
 user_not_found = HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,

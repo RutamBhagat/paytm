@@ -2,7 +2,7 @@ from typing import List, Optional
 from fastapi import APIRouter, HTTPException, status
 
 from src.app.core.hash import get_password_hash, verify_password
-from src.app.schemas.schema import ChangePasswordBody, PatchUserBody, UserResponse
+from src.app.schemas.user_schema import ChangePasswordBody, PatchUserBody, UserResponse
 from src.app.db.access_layers import db_users
 from src.app.api.dependencies import db_dependency, user_dependency
 

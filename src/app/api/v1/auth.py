@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from src.app.core.auth import create_access_token
 from src.app.core.hash import verify_password
-from src.app.schemas.schema import UserBody
+from src.app.schemas.user_schema import UserBody
 from src.app.db.access_layers import db_users
 from src.app.api.dependencies import db_dependency, login_dependency
 
