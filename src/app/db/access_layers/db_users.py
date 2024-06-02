@@ -1,5 +1,4 @@
 from typing import Optional
-from dotenv.cli import get
 from fastapi import HTTPException, status
 from sqlalchemy.orm.session import Session
 from sqlalchemy import or_
@@ -54,6 +53,13 @@ async def patch_user(db: Session, user: DBUsers, user_update: PatchUserBody):
     for key in user_update.keys():
         if key == "hashed_password":
             continue
+        elif key == "username" and user.username != user_update[key]:
+            user_exists = await get_user(db, user_update[key])
+            if user_exists:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Username already exists",
+                )
         setattr(user, key, user_update[key])
     db.add(user)
     db.commit()

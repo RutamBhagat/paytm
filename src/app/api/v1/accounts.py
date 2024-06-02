@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, HTTPException, status
+from fastapi import APIRouter, status
 from src.app.schemas.accounts_schema import AccountsResponse, TransferRequest
 from src.app.db.access_layers import db_accounts
 from src.app.api.dependencies import db_dependency, user_dependency
@@ -29,15 +29,22 @@ async def create_account(db: db_dependency, user: user_dependency) -> AccountsRe
 
 
 # Transfer money from one account id to another account id
-@router.post(
-    "/transfer_money",
-    status_code=status.HTTP_201_CREATED,
-    response_model=AccountsResponse,
-)
+@router.patch("/transfer_money", status_code=status.HTTP_204_NO_CONTENT)
 async def transfer_money(
     db: db_dependency,
     user: user_dependency,
-    transfer=TransferRequest,
-) -> AccountsResponse:
-    account = await db_accounts.transfer_money(db, transfer)
-    return account
+    transfer: TransferRequest,
+):
+    await db_accounts.transfer_money(db, user, transfer)
+
+
+# Withdraw money from the users account
+@router.patch("/withdraw_money", status_code=status.HTTP_204_NO_CONTENT)
+async def withdraw_money(db: db_dependency, user: user_dependency, amount: int):
+    await db_accounts.withdraw_money(db, user.id, amount)
+
+
+# Deposit money to the users account
+@router.patch("/deposit_money", status_code=status.HTTP_204_NO_CONTENT)
+async def deposit_money(db: db_dependency, user: user_dependency, amount: int):
+    await db_accounts.deposit_money(db, user.id, amount)
