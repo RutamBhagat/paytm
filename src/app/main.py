@@ -1,8 +1,7 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from src.app.middleware import time_middleware
-from src.app.middleware import cors_middleware
+from src.app.middleware import time_middleware, cors_middleware
 from src.app.models import models
 from src.app.db.database import engine
 from src.app.api import router as api_router

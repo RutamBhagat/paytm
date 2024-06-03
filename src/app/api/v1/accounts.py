@@ -52,8 +52,13 @@ async def deposit_money(db: db_dependency, user: user_dependency, amount: int):
     await db_accounts.deposit_money(db, user.id, amount)
 
 
+# Note this is not a part of accounts endpoints but it is a separate test endpoint
 # Get random todos from https://sum-server.100xdevs.com/todos
-@router.get("/get_random_todos", status_code=status.HTTP_200_OK)
+@router.get(
+    "/get_random_todos",
+    status_code=status.HTTP_200_OK,
+    description="Note this is not a part of accounts endpoints but it is a separate test endpoint",
+)
 async def get_random_todos():
     urls = ["https://sum-server.100xdevs.com/todos"] * 10
     async with httpx.AsyncClient() as client:
