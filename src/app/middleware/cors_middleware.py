@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 
-def add_cors_middleware(app: FastAPI):
+def middleware(app: FastAPI):
     origins = ["*"]
     app.add_middleware(
         CORSMiddleware,

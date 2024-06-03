@@ -1,3 +1,6 @@
+import httpx
+import aiohttp
+import asyncio
 from fastapi import APIRouter, status
 from src.app.schemas.accounts_schema import AccountsResponse, TransferRequest
 from src.app.db.access_layers import db_accounts
@@ -48,3 +51,27 @@ async def withdraw_money(db: db_dependency, user: user_dependency, amount: int):
 @router.patch("/deposit_money", status_code=status.HTTP_204_NO_CONTENT)
 async def deposit_money(db: db_dependency, user: user_dependency, amount: int):
     await db_accounts.deposit_money(db, user.id, amount)
+
+
+# Get random todos from https://sum-server.100xdevs.com/todos
+@router.get("/get_random_todos", status_code=status.HTTP_200_OK)
+async def get_random_todos():
+    urls = ["https://sum-server.100xdevs.com/todos"] * 10
+    async with httpx.AsyncClient() as client:
+        tasks = [client.get(url) for url in urls]
+        responses = await asyncio.gather(*tasks)
+    todos = [response.json() for response in responses]
+    return todos
+
+
+@router.get("/get_random_todos_with_aiohttp", status_code=status.HTTP_200_OK)
+async def get_random_todos_with_aiohttp():
+    urls = ["https://sum-server.100xdevs.com/todos"] * 10
+    async with aiohttp.ClientSession() as session:
+        tasks = [session.get(url) for url in urls]
+        responses = await asyncio.gather(*tasks)
+    todos = []
+    for response in responses:
+        data = await response.json()
+        todos.append(data)
+    return todos
