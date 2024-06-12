@@ -15,7 +15,8 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 # Middleware
-cors_middleware.middleware(app)
+app.add_middleware(cors_middleware.get_cors_config())
+# this has different syntax
 app.middleware("http")(time_middleware.middleware)
 
 
